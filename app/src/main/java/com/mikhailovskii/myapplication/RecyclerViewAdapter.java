@@ -49,6 +49,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return notes.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     private void fireItemClicked(int position, Note note){
         if (onItemClickListener!=null){
             onItemClickListener.onItemClicked(position, note);

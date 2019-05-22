@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface NoteDao {
 
-    @Query ("SELECT * FROM NOTE")
+    @Query ("SELECT * FROM Note")
     List<Note> getNotes();
 
     @Query("SELECT * FROM Note WHERE id = :id")
