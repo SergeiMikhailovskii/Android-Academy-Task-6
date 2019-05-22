@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
         database = App.getInstance().getDatabase();
         noteDao = database.noteDao();
 
-        notes = new ArrayList<>();
-        notes = noteDao.getNotes();
-
         mTitleEdit = findViewById(R.id.title_edittext);
         mBodyEdit = findViewById(R.id.body_edittext);
         mAddButton = findViewById(R.id.add_button);
@@ -47,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAddButton.setOnClickListener(v->onAddClick());
 
-        adapter = new RecyclerViewAdapter(notes, getApplicationContext());
-        mNotesRecycler.setAdapter(adapter);
+        invalidateRecyclerView();
 
         Stetho.initializeWithDefaults(getApplicationContext());
     }
@@ -60,12 +56,19 @@ public class MainActivity extends AppCompatActivity {
         note.setTitle(title);
         note.setBody(body);
         noteDao.insertNote(note);
-//        adapter.notifyDataSetChanged();
+        invalidateRecyclerView();
+    }
 
+    private void onItemClickListener(int position){
+        noteDao.deleteNote(notes.get(position));
+        invalidateRecyclerView();
+    }
+
+    private void invalidateRecyclerView(){
         notes = noteDao.getNotes();
         adapter = new RecyclerViewAdapter(notes, getApplicationContext());
+        adapter.setOnItemClickListener((position, item) -> onItemClickListener(position));
         mNotesRecycler.setAdapter(adapter);
-
     }
 
 }
